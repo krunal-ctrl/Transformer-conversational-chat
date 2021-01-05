@@ -1,12 +1,12 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
-from textblob import TextBlob
+from googletrans import Translator
 
 app = Flask(__name__)
-app.secret_key = "sfdjkafnk"
 socketio = SocketIO(app)
 clients = []
+userdata = {}
 
 
 @app.route('/')
@@ -18,27 +18,34 @@ def home():
 def chat():
     username = request.args.get('username')
     room = request.args.get('room')
-    clients.append(request.sid)  # collect sid so we can use it for later use (
+    lang = request.args.get('lang')
+
     if username and room:
-        return render_template('chat.html', username=username, room=room)
+        return render_template('chat.html', username=username, room=room, lang=lang)
     else:
         return redirect(url_for('home'))
 
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
-    app.logger.info("{} has sent message to the room {}: {}".format(data['username'],
-                                                                    data['room'],
-                                                                    data['message']))
-    blob = TextBlob(data['message'])
-    data['message'] = str(blob.translate(to='es'))
-    socketio.emit('receive_message', data, room=data['room'])
+    app.logger.info("{} has sent message to the room {}: {} in {}".format(data['username'],
+                                                                          data['room'],
+                                                                          data['message'], data['lang']))
+    for sid in clients:
+        print(userdata[sid], data['lang'])
+        if userdata[sid] != data['lang']:
+            translator = Translator()
+            data['message'] = str(translator.translate(data['message'], dest=data['lang']))
+        socketio.emit('receive_message', data, room=sid)
 
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
+    print(data)
     join_room(data['room'])
+    clients.append(request.sid)  # collect sid so we can use it for later use
+    userdata[request.sid] = data['lang']
     socketio.emit('join_room_announcement', data, room=data['room'])
 
 

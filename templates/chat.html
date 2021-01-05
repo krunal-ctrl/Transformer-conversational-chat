@@ -21,7 +21,8 @@
     socket.on('connect', function () {
         socket.emit('join_room', {
             username: "{{ username }}",
-            room: "{{ room }}"
+            room: "{{ room }}",
+            lang: "{{ lang }}"
         });
 
         let message_input = document.getElementById('message_input');
