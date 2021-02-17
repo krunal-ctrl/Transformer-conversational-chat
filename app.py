@@ -32,11 +32,12 @@ def handle_send_message_event(data):
                                                                           data['room'],
                                                                           data['message'], data['lang']))
     for sid in clients:
-        print(userdata[sid], data['lang'])
+        # print(userdata[sid], data['lang'])
         if userdata[sid] != data['lang']:
             translator = Translator()
-            data['message'] = str(translator.translate(data['message'], dest=data['lang']))
+            data['message'] = str(translator.translate(data['message'], dest=userdata[sid]))
         socketio.emit('receive_message', data, room=sid)
+        print("--debug--")
 
 
 @socketio.on('join_room')
