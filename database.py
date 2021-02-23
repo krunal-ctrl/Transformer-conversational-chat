@@ -1,8 +1,7 @@
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash
-
-client = MongoClient(
-    "mongodb+srv://admin:2REM1fApjzgjZhbs@translationchat.estvu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+import api
+client = MongoClient(api.API)
 
 chat_db = client.get_database('ChatApp')
 user_collection = chat_db.get_collection('user')
