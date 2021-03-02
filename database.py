@@ -1,7 +1,8 @@
 from pymongo import MongoClient
+import os
 from werkzeug.security import generate_password_hash
-import api
-client = MongoClient(api.API)
+
+client = MongoClient(os.environ.get('MONGO_URL))
 
 chat_db = client.get_database('ChatApp')
 user_collection = chat_db.get_collection('user')
