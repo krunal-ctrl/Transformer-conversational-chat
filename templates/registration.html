@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="../static/style1.css">
     <title>Document</title>
 </head>
 <body>
     <div class="regform"><h1>New User Registration</h1></div></div>
     <div class="main">
-        <form action="">
+        <form action="/signup", method="post">
             
             <div id="name">
                 <h2 class="name">Name</h2>
-                <input class="firstname" type="text" name="first_name" id=""><br>
+                <input class="firstname" type="text" name="username" id=""><br>
                 <label class="firstlabel">first name</label>
-                <input class="lastname" type="text" name="last_name" id="">
+                <input class="lastname" type="text" name="password" id="">
                 <label for="" class="lastlabel">last name</label>
             </div>
 
             <h2 class="name">Email</h2>
             <input class="email" type="email" name="email" id="">
             <h2 class='name'>Language</h2>
-            
+            <!--
             <select name="language" id="" class="options">
                 <option disabled="disabled" selected="selected" value="">
                     --Choose your language--
@@ -34,7 +34,7 @@
                 <option>Gujarati</option>
                 <option>French</option>
             </select><br>
-
+-->
             <button type="submit">Register</button>
 
         </form>
