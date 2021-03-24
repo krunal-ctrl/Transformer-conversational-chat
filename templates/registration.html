@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style1.css">
-    <title>Document</title>
+    <title>Registration</title>
 </head>
+
 <body>
-    <div class="regform"><h1>New User Registration</h1></div></div>
+    <div class="regform">
+        <h1>New User Registration</h1>
+    </div>
+    </div>
     <div class="main">
         <form action="">
-            
+
             <div id="name">
-                <h2 class="name">Name</h2>
-                <input class="firstname" type="text" name="first_name" id=""><br>
-                <label class="firstlabel">first name</label>
-                <input class="lastname" type="text" name="last_name" id="">
-                <label for="" class="lastlabel">last name</label>
+                <h2 class="name">Username</h2>
+                <input class="firstname" type="text" name="first_name" id="" placeholder="user-id"><br>
+                <!-- <label class="firstlabel">username</label> -->
+                <!-- <input class="lastname" type="text" name="last_name" id="" placeholder="Last Name"> -->
+                <!-- <label for="" class="lastlabel">last name</label> -->
             </div>
 
+            <h2 class="name">Password</h2>
+            <input class="password" type="password" name="password" id="" placeholder="123@xyZ(*)">
+
             <h2 class="name">Email</h2>
-            <input class="email" type="email" name="email" id="">
+            <input class="email" type="email" name="email" id="" placeholder="abc@xyz.pqr">
             <h2 class='name'>Language</h2>
-            
+
             <select name="language" id="" class="options">
                 <option disabled="disabled" selected="selected" value="">
                     --Choose your language--
@@ -34,12 +42,13 @@
                 <option>Gujarati</option>
                 <option>French</option>
             </select><br>
-
+            <a href="login.html">Login</a>
             <button type="submit">Register</button>
 
         </form>
-        
+
 
     </div>
 </body>
+
 </html>
