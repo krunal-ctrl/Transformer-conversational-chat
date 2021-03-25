@@ -10,6 +10,7 @@
 <body>
     <div class="regform"><h1>New User Registration</h1></div></div>
     <div class="main">
+        <h3>{{ message }}</h3>
         <form action="/signup", method="post">
 
            <div id="name">
@@ -31,11 +32,9 @@
                 <option disabled="disabled" selected="selected" value="">
                     --Choose your language--
                 </option>
-                <option>English</option>
-                <option>Hindi</option>
-                <option>Espanol</option>
-                <option>Gujarati</option>
-                <option>French</option>
+                {%   for lang in dict_lang %}
+                <option>{{ lang }}</option>
+                {% endfor %}
             </select><br>
             <a href="login">Login</a>
             <button type="submit">Register</button>

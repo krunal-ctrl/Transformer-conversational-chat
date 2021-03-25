@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, join_room, leave_room
 from googletrans import Translator
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from pymongo.errors import DuplicateKeyError
+from language import get_lang, get_supported_lang
 
 from database import *
 
@@ -61,7 +62,7 @@ def signup():
             return redirect(url_for('login'))
         except DuplicateKeyError:
             message = "UserName already exists please try antoher name"
-    return render_template('registration.html', message=message)
+    return render_template('registration.html', message=message, dict_lang=get_supported_lang())
 
 
 @app.route("/logout")
@@ -108,16 +109,14 @@ def handle_send_message_event(data):
                                                                           data['room'],
                                                                           data['message'], data['lang']))
     for sid in clients:
-        # print(userdata[sid], data['lang'])
         translator = Translator()
-        data['message'] = str(translator.translate(data['message'], dest=userdata[sid]).text)
+        data['message'] = str(translator.translate(data['message'], dest=get_lang(userdata[sid])).text)
         socketio.emit('receive_message', data, room=sid)
 
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
-    print(data)
     join_room(data['room'])
     clients.append(request.sid)  # collect sid so we can use it for later use
     userdata[request.sid] = data['lang']
