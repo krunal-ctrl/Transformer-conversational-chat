@@ -5,7 +5,7 @@ from googletrans import Translator
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from pymongo.errors import DuplicateKeyError
 
-from database import get_user, save_user
+from database import *
 
 app = Flask(__name__)
 app.secret_key = "my_secret_key"
@@ -20,7 +20,10 @@ userdata = {}
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        rooms = get_rooms_for_user(current_user.username)
+        return render_template('index.html', rooms=rooms)
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -44,7 +47,6 @@ def login():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-
     if current_user.is_authenticated:
         return redirect(url_for('home'))
 
@@ -68,17 +70,35 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/chat')
+@app.route('/create_room', methods=['GET', 'POST'])
 @login_required
-def chat():
-    username = request.args.get('username')
-    room = request.args.get('room')
-    lang = request.args.get('lang')
+def create_room():
+    message = ""
+    if request.method == "POST":
+        room_name = request.form.get('room_name')
+        usernames = [username.strip() for username in request.form.get('members').split(';')]
 
-    if username and room:
-        return render_template('chat.html', username=username, room=room, lang=lang)
+        if len(room_name) and len(usernames):
+            room_id = save_room(room_name, current_user.username)
+            if current_user.username in usernames:
+                usernames.remove(current_user.username)
+            add_room_members(room_id, room_name, usernames, current_user.username)
+            return redirect(url_for('view_room', room_id=room_id))
+        else:
+            message = "Faied to create room"
+    return render_template('create_room.html', message=message)
+
+
+@app.route('/rooms/<room_id>/')
+@login_required
+def view_room(room_id):
+    room = get_room(room_id)
+
+    if room and is_room_member(room_id, current_user.username):
+        room_members = get_room_members(room_id)
+        return render_template('view_room.html', username=current_user.username, room=room, room_members=room_members)
     else:
-        return redirect(url_for('home'))
+        return "Room not found, 404"
 
 
 @socketio.on('send_message')
@@ -89,7 +109,7 @@ def handle_send_message_event(data):
     for sid in clients:
         # print(userdata[sid], data['lang'])
         translator = Translator()
-        data['message'] = str(translator.translate(data['message'], dest=userdata[sid]).text)
+        #data['message'] = str(translator.translate(data['message'], dest=userdata[sid]).text)
         socketio.emit('receive_message', data, room=sid)
 
 

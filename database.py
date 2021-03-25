@@ -5,7 +5,8 @@ from werkzeug.security import generate_password_hash
 import os
 from user import User
 
-client = MongoClient(os.environ.get('MONGO_URL'))
+#client = MongoClient(os.environ.get('MONGO_URL'))
+client = MongoClient('mongodb+srv://admin:2REM1fApjzgjZhbs@translationchat.estvu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 chat_db = client.get_database('ChatApp')
 user_collection = chat_db.get_collection('user')
 room_collection = chat_db.get_collection("rooms")
@@ -34,7 +35,7 @@ def update_room(room_id, room_name):
 
 
 def get_room(room_id):
-    room_collection.find_one({'_id': ObjectId(room_id)})
+    return room_collection.find_one({'_id': ObjectId(room_id)})
 
 
 def add_room_member(room_id, room_name, username, added_by, is_room_admin=False):
