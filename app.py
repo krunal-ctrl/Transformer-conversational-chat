@@ -55,8 +55,9 @@ def signup():
         username = request.form.get('username')
         password_input = request.form.get('password')
         email = request.form.get('email')
+        language = request.form.get('language')
         try:
-            save_user(username, email, password_input)
+            save_user(username, email, password_input, language)
             return redirect(url_for('login'))
         except DuplicateKeyError:
             message = "UserName already exists please try antoher name"
@@ -96,7 +97,7 @@ def view_room(room_id):
 
     if room and is_room_member(room_id, current_user.username):
         room_members = get_room_members(room_id)
-        return render_template('view_room.html', username=current_user.username, room=room, room_members=room_members)
+        return render_template('view_room.html', username=current_user.username, room=room, room_members=room_members, lang=current_user.lang)
     else:
         return "Room not found, 404"
 
@@ -109,7 +110,7 @@ def handle_send_message_event(data):
     for sid in clients:
         # print(userdata[sid], data['lang'])
         translator = Translator()
-        #data['message'] = str(translator.translate(data['message'], dest=userdata[sid]).text)
+        data['message'] = str(translator.translate(data['message'], dest=userdata[sid]).text)
         socketio.emit('receive_message', data, room=sid)
 
 
