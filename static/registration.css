@@ -10,7 +10,7 @@ body{
 }
 .regform{
     width: 800px;
-    background-color: rgb(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     margin: auto;
     margin-top: 100px;
     color: #FFFFFF;
@@ -20,7 +20,7 @@ body{
 }
 .main{
     width: 800px;
-    background-color: rgb(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     margin: auto;
 }
 form{
@@ -59,8 +59,8 @@ form{
     border-radius: 6px;
     padding: 0 22px;
     font-size: 16px;
-    color: #555; */
-}
+    color: #555;
+} */
 /* .firstlabel{
     position: relative;
     color: #e5e5e5;
@@ -149,5 +149,4 @@ a {
 }
 a:hover{
     background-color:rgb(64, 65, 63) ;
-}
 }
