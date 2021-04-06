@@ -21,7 +21,6 @@ def get_user(username):
     user_data = user_collection.find_one({'_id': username})
     return User(user_data['_id'], user_data['email'], user_data['password'], user_data['lang']) if user_data else None
 
-
 def save_room(room_name, created_by):
     room_id = room_collection.insert_one(
         {'room_name': room_name, 'created_by': created_by, 'created_at': datetime.now()}).inserted_id
@@ -69,3 +68,4 @@ def is_room_member(room_id, username):
 def is_room_admin(room_id, username):
     return room_members_collection.count_documents(
         {'_id': {'room_id': ObjectId(room_id), 'username': username}, 'is_room_admin': True})
+
